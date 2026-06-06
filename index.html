@@ -1,23 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Search & Track</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoTrack — Search, Monitor & Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    <div class="container">
-        <h2>Search Cryptocurrency</h2>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Enter coin name or symbol (e.g., BTC, Bitcoin)...">
-            <button onclick="searchCoin()">Search</button>
-        </div>
-        
-        <div id="resultArea" class="result-area"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <div class="wrapper">
+
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">CryptoTrack</span>
+      </div>
+      <p class="tagline">Real-time crypto intelligence</p>
+      
+      <nav class="app-nav">
+        <button id="navMarket" class="nav-btn active">Market Explorer</button>
+        <button id="navPortfolio" class="nav-btn">My Portfolio</button>
+      </nav>
+    </header>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="loader" id="loader">
+      <div class="spinner"></div><span>Fetching live data…</span>
     </div>
 
-    <script src="script.js"></script>
+    <div id="viewMarket">
+      <section class="search-section">
+        <div class="search-container" id="searchContainer">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="searchInput" class="search-input"
+              placeholder="Search by name or symbol (BTC, ETH, SOL…)" autocomplete="off" />
+            <button class="clear-btn" id="clearBtn" title="Clear">✕</button>
+          </div>
+          <div class="dropdown" id="dropdown">
+            <div class="dropdown-section-label">Popular Coins</div>
+            <div class="dropdown-list" id="dropdownList"></div>
+            <div class="dropdown-hint">Type to search all coins</div>
+          </div>
+        </div>
+        <button class="search-btn" id="searchBtn">
+          <span>Track</span><span class="btn-arrow">→</span>
+        </button>
+      </section>
+
+      <section class="coin-card" id="coinCard" style="display:none">
+
+        <div class="card-header">
+          <div class="coin-identity">
+            <img class="coin-logo" id="coinLogo" src="" alt="" />
+            <div>
+              <h2 class="coin-name" id="coinName"></h2>
+              <span class="coin-symbol" id="coinSymbol"></span>
+              <span class="coin-rank" id="coinRank"></span>
+            </div>
+          </div>
+          <div class="price-block">
+            <div class="current-price" id="currentPrice"></div>
+            <div class="price-change" id="priceChange"></div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box"><div class="stat-label">Market Cap</div><div class="stat-value" id="marketCap"></div></div>
+          <div class="stat-box"><div class="stat-label">24h Volume</div><div class="stat-value" id="volume24h"></div></div>
+          <div class="stat-box"><div class="stat-label">24h High</div><div class="stat-value high" id="high24h"></div></div>
+          <div class="stat-box"><div class="stat-label">24h Low</div><div class="stat-value low" id="low24h"></div></div>
+          <div class="stat-box"><div class="stat-label">Circulating Supply</div><div class="stat-value" id="circSupply"></div></div>
+          <div class="stat-box"><div class="stat-label">All-Time High</div><div class="stat-value" id="athPrice"></div></div>
+        </div>
+
+        <div class="chart-section">
+          <div class="chart-toolbar">
+            <div class="chart-title-group">
+              <span class="chart-title">Price & Moving Averages</span>
+              <button id="resetZoomBtn" class="badge" style="cursor:pointer; border:none; display:none;">↺ Reset Zoom</button>
+              <div class="ma-toggles">
+                <label class="ma-toggle" data-key="ma7">
+                  <input type="checkbox" id="toggleMA7" checked />
+                  <span class="ma-dot" style="background:#f9c74f"></span> MA7
+                </label>
+                <label class="ma-toggle" data-key="ma25">
+                  <input type="checkbox" id="toggleMA25" checked />
+                  <span class="ma-dot" style="background:#f3722c"></span> MA25
+                </label>
+                <label class="ma-toggle" data-key="ma99">
+                  <input type="checkbox" id="toggleMA99" checked />
+                  <span class="ma-dot" style="background:#a855f7"></span> MA99
+                </label>
+              </div>
+            </div>
+            <div class="chart-periods">
+              <button class="period-btn active" data-days="1">24H</button>
+              <button class="period-btn" data-days="7">7D</button>
+              <button class="period-btn" data-days="30">30D</button>
+              <button class="period-btn" data-days="90">90D</button>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="priceChart"></canvas>
+            <div class="chart-loader" id="chartLoader"><div class="spinner small"></div></div>
+          </div>
+          <div class="chart-subtitle" style="margin-top: 8px; text-align: right;">*Scroll/Pinch to Zoom, Click & Drag to Pan</div>
+        </div>
+
+        <div class="chart-section border-top">
+          <div class="chart-toolbar">
+            <span class="chart-title">Trading Volume</span>
+            <span class="chart-subtitle" id="volumeLabel"></span>
+          </div>
+          <div class="chart-wrapper short">
+            <canvas id="volumeChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-section border-top">
+          <div class="chart-toolbar">
+            <span class="chart-title">RSI <span class="badge">14</span></span>
+            <div class="rsi-legend">
+              <span class="rsi-tag overbought">Overbought &gt;70</span>
+              <span class="rsi-tag oversold">Oversold &lt;30</span>
+            </div>
+          </div>
+          <div class="chart-wrapper short">
+            <canvas id="rsiChart"></canvas>
+          </div>
+          <div class="indicator-row" id="rsiReading"></div>
+        </div>
+
+        <div class="chart-section border-top">
+          <div class="chart-toolbar">
+            <span class="chart-title">MACD <span class="badge">12,26,9</span></span>
+            <div class="macd-legend">
+              <span><span class="dot" style="background:#5b8def"></span>MACD</span>
+              <span><span class="dot" style="background:#f9c74f"></span>Signal</span>
+              <span><span class="dot" style="background:#00f5c4"></span>Histogram</span>
+            </div>
+          </div>
+          <div class="chart-wrapper medium">
+            <canvas id="macdChart"></canvas>
+          </div>
+          <div class="indicator-row" id="macdReading"></div>
+        </div>
+
+        <div class="chart-section border-top">
+          <div class="chart-toolbar">
+            <span class="chart-title">Trend Prediction <span class="badge">Linear Regression</span></span>
+            <span class="chart-subtitle">Projecting next 10 periods</span>
+          </div>
+          <div class="chart-wrapper medium">
+            <canvas id="predictionChart"></canvas>
+          </div>
+        </div>
+
+        <div class="description-section" id="descSection" style="display:none">
+          <div class="desc-label">About</div>
+          <p class="desc-text" id="descText"></p>
+        </div>
+
+      </section>
+    </div>
+
+    <div id="viewPortfolio" style="display:none;">
+      
+      <div class="port-summary-grid">
+        <div class="port-card">
+          <div class="port-card-title">Total Balance</div>
+          <div class="port-card-value" id="portTotalValue">$0.00</div>
+        </div>
+        <div class="port-card">
+          <div class="port-card-title">Total Profit / Loss</div>
+          <div class="port-card-value neu" id="portTotalPnL">$0.00</div>
+        </div>
+      </div>
+
+      <div class="port-add-section">
+        <input type="text" class="port-input" id="portCoinInput" placeholder="Coin Symbol (e.g., BTC)" autocomplete="off">
+        <input type="number" class="port-input" id="portAmount" placeholder="Amount owned" step="any">
+        <input type="number" class="port-input" id="portPrice" placeholder="Avg Buy Price ($)" step="any">
+        <button class="port-btn" id="portAddBtn">Add Asset</button>
+      </div>
+
+      <div class="port-table-container">
+        <div class="port-table-header">
+          <span>Asset</span>
+          <span>Balance</span>
+          <span>Avg Buy Price</span>
+          <span>Current Price</span>
+          <span>Total Value</span>
+          <span>Profit/Loss</span>
+          <span>Action</span>
+        </div>
+        <div id="portAssetsList">
+          </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
