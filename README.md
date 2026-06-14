@@ -14,7 +14,7 @@ choose open with live server, now it will successfully work
 
 <img width="683" height="977" alt="image" src="https://github.com/user-attachments/assets/d3b3af78-0199-41bd-b49d-4213d62d57a1" />
 
-OR
+**OR**
 
 USE THE LINK I ATTACHED
-
+https://crypto-currency-two-omega.vercel.app/
