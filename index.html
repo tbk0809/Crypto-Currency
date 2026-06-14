@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CryptoTrack — Search, Monitor & Portfolio</title>
+  <title>
+    
+    CryptoTrack — Search, Monitor & Portfolio
+
+  </title>
+  <link rel="icon"  href="logo.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -17,10 +23,10 @@
 
     <header class="header">
       <div class="logo">
-        <span class="logo-icon">◈</span>
-        <span class="logo-text">CryptoTrack</span>
+      <span class="logo-text">CryptoTrack</span>
       </div>
-      <p class="tagline">Real-time crypto intelligence</p>
+      <p class="tagline">A real-time crypto intelligence that fetch the data from CoinGecko</p>
+      <span class="highlight"><strong>Try it out!!</strong></span>
       
       <nav class="app-nav">
         <button id="navMarket" class="nav-btn active">Market Explorer</button>
@@ -49,7 +55,7 @@
           </div>
         </div>
         <button class="search-btn" id="searchBtn">
-          <span>Track</span><span class="btn-arrow">→</span>
+          <span>Track→</span><span class="btn-arrow"></span>
         </button>
       </section>
 
@@ -110,7 +116,7 @@
             <canvas id="priceChart"></canvas>
             <div class="chart-loader" id="chartLoader"><div class="spinner small"></div></div>
           </div>
-          <div class="chart-subtitle" style="margin-top: 8px; text-align: right;">*Scroll/Pinch to Zoom, Click & Drag to Pan</div>
+          <div class="chart-subtitle" style="margin-top: 8px; text-align: right;">*Scroll/Pinch to Zoom</div>
         </div>
 
         <div class="chart-section border-top">
@@ -206,7 +212,33 @@
 
     </div>
 
-  </div>
+
+
+
+</div>
+
+
+<footer>
+<hr class="section-divider" />
+      <div class="personaldescription">
+        <div>
+          <a href="https://github.com/tbk0809" target="_blank" >
+            <img src="github.png"   class="image" title="Click to view my GitHub profile"/>
+          </a>
+        </div>
+        <div>
+          <a href="https://www.instagram.com/" target="_blank" >
+            <img src="ig.png" class="image" title="Click to view my Instagram profile"/>
+          </a>
+        </div>
+        <div>
+          <a href="https://www.linkedin.com/in/boon-kai-tan-02b911324/" target="_blank">
+            <img src="linkedin.png"  class="image" title="Click to view my LinkedIn profile"/>
+          </a>
+        </div>
+      </div>
+    </div>    
+  </footer>  
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
